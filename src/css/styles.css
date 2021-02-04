@@ -1,0 +1,51 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url(../images/bg-pattern.png);
+  font-size: 35px;
+  font-family: sans-serif;
+}
+
+#input {
+  display: block;
+  border-radius: 5px;
+  margin: 30px auto;
+  height: 50px;
+  width: 400px;
+  padding: 10px;
+  font-size: 30px;
+}
+
+.title {
+  text-align: center;
+  font-size: 50px;
+  margin-bottom: 35px;
+}
+
+.country-info {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  align-items: center;
+}
+.card-item {
+  margin-bottom: 30px;
+  font-weight: 500;
+}
+.card-item > span,
+.list {
+  font-weight: 700;
+}
+.flag-img {
+  width: 45%;
+  height: auto;
+}
+.list-item {
+  padding-top: 20px;
+  margin-left: 50px;
+  font-weight: 500;
+}
