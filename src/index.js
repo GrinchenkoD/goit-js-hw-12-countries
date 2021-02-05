@@ -3,11 +3,13 @@ import "./css/styles.css";
 import debounce from "lodash/debounce";
 import "@pnotify/core/dist/PNotify.css";
 import "@pnotify/core/dist/BrightTheme.css";
-import { error } from "@pnotify/core";
+import { error, info } from "@pnotify/core";
 import soloResponseTpl from "./templates/soloResponse.hbs";
 import listResponseTpl from "./templates/twoToTenResponse.hbs";
 //
 import obj from "./js/fetchCountries.js";
+import config from "./js/config.js";
+
 //
 const container = document.querySelector(".container");
 const input = document.querySelector("#input");
@@ -25,6 +27,14 @@ input.addEventListener(
           container.innerHTML = soloResponseTpl(data);
         } else if (data.length >= 2 && data.length <= 10) {
           container.innerHTML = listResponseTpl(data);
+          resultMessage(info, "Choose country from list");
+          document.querySelector(".list").addEventListener("click", (e) => {
+            if (event.target.nodeName === "LI") {
+              obj
+                .fetchCountries(event.target.textContent)
+                .then((data) => (container.innerHTML = soloResponseTpl(data)));
+            }
+          });
         } else if (data.length > 10) {
           container.innerHTML = "";
           resultMessage(

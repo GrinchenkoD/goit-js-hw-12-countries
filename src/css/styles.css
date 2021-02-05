@@ -45,7 +45,10 @@ body {
   height: auto;
 }
 .list-item {
-  padding-top: 20px;
+  margin-top: 20px;
   margin-left: 50px;
   font-weight: 500;
+}
+.list-item.twoTenItem {
+  cursor: pointer;
 }
