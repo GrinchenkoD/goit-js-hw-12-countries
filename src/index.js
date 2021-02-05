@@ -1,42 +1,46 @@
 import "./css/styles.css";
-
+//
 import debounce from "lodash/debounce";
-
+import "@pnotify/core/dist/PNotify.css";
+import "@pnotify/core/dist/BrightTheme.css";
+import { error } from "@pnotify/core";
+import soloResponseTpl from "./templates/soloResponse.hbs";
+import listResponseTpl from "./templates/twoToTenResponse.hbs";
+//
 import obj from "./js/fetchCountries.js";
-// import "@pnotify/core/dist/BrightTheme.css";
-// import "@pnotify/core/dist/Material.css";
-// import "material-design-icons/iconfont/material-icons.css";
-// //
-// import {
-//   alert,
-//   defaultModules,
-// } from "node_modules/@pnotify/core/dist/PNotify.js";
-// import * as PNotifyMobile from "node_modules/@pnotify/mobile/dist/PNotifyMobile.js";
-
-// defaultModules.set(PNotifyMobile, {});
 //
-//----  Название страны для поиска пользователь вводит в текстовое поле.
-// HTTP-запросы на бекенд происходят при наборе имени страны в инпуте, то есть по событию input
-//
-// ----на обработчик события необходимо применить подход debounce и делать HTTP-запрос спустя 500мс
-//
-// ----Если бекенд вернул больше чем 10 стран подошедших под критерий введенный пользователем,
-//     в интерфейсе отображается нотификация о том, что необходимо сделать запрос более специфичным
-//
-// ----Если бекенд вернул от 2-х до 10-х стран, под инпутом отображается список имен найденных стран.
-// //
-// ----Если бекенд вернул массив с одной страной, в интерфейсе рендерится разметка с данными о стране:
-// название, столица, население, языки и флаг.
-
-//https://restcountries.eu/rest/v2/name/{name}
-//
-
-//
+const container = document.querySelector(".container");
 const input = document.querySelector("#input");
 
 input.addEventListener(
   "input",
   debounce((e) => {
-    obj.fetchCountries(e.target.value);
+    obj
+      .fetchCountries(e.target.value)
+      .then((data) => {
+        if (data.length === 0) {
+          resultMessage(error, "Invalid country name. Check it please");
+          container.innerHTML = "";
+        } else if (data.length === 1) {
+          container.innerHTML = soloResponseTpl(data);
+        } else if (data.length >= 2 && data.length <= 10) {
+          container.innerHTML = listResponseTpl(data);
+        } else if (data.length > 10) {
+          container.innerHTML = "";
+          resultMessage(
+            error,
+            "Too many matches found. Please enter more specific query",
+          );
+        }
+      })
+      .catch((err) => console.log(err));
   }, 500),
 );
+
+function resultMessage(typeInfo, textInfo) {
+  typeInfo({
+    text: `${textInfo}`,
+    delay: 5000,
+    closerHover: true,
+  });
+}
